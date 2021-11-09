@@ -13,11 +13,12 @@ class BookInline(admin.TabularInline):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    fields = ["last_name", "birthdate"]
+    fields = ["first_name", "last_name", "birthdate", "about"]
     list_filter = ["last_name"]
 
 
 @admin.register(Book)
 class BookAdmin(admin.ModelAdmin):
+    fields = ["name", "description", "price", "author", "genre", "rating", "available"]
     list_filter = ["price", "rating"]
     filter_horizontal = ["author"]
