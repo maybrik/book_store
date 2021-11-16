@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Домашняя страница книжного магазина</h1>
+
+<p>Добро пожаловать в <em>Книжный магазин</em>!</p>
+
+<h2>Контент</h2>
+
+<p>В нашем магазине представлено следующее:</p>
+<ul>
+<li><strong>Всего книг:</strong> {{ num_books }}</li>
+<li><strong>Доступные к заказу книги:</strong> {{ num_instances_available }}</li>
+<li><strong>Авторы:</strong> {{ num_authors }}</li>
+</ul>
+
+
+{% endblock %}

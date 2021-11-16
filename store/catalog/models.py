@@ -5,6 +5,7 @@ class Author(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     birthdate = models.DateField()
+    deathdate = models.DateField()
     about = models.CharField(max_length=500)
 
     class Meta:
