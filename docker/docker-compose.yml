@@ -2,6 +2,52 @@ version: "3.3"
 
 services:
 
+  store:
+    build: ./store
+    command: python manage.py runserver
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./store/:/usr/src/store/
+    depends_on:
+      - db_store
+    networks:
+      - store
+
+  db_store:
+    image: postgres:latest
+    container_name: dv_store
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'post_db'
+    networks:
+      - store
+    ports:
+      - "8001:8000"
+
+  warehouse:
+    build: ./warehouse
+    command: python manage.py runserver
+    ports:
+      - "7000:7000"
+    depends_on:
+      - db_warehouse
+    networks:
+      - warehouse
+
+  db_warehouse:
+    image: postgres:latest
+    container_name: db_warehouse
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'post_db'
+    networks:
+      - warehouse
+    ports:
+      - "7001:7000"
+
   web:
     container_name: nginx
     image: nginx
@@ -48,10 +94,10 @@ services:
       PGDATA: /data/postgres
     ports:
       - "5432:5432"
-    # volumes:
-    #  - postgres:/data/postgres
-    # networks:
-    #  - postgres
+    volumes:
+      - postgres:/data/postgres
+    networks:
+      - postgres
     restart: on-failure
     healthcheck:
       test: [ "CMD", "pg_isready", "-U" ]
@@ -65,11 +111,10 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: pgadmin4@pgadmin.org
       PGADMIN_DEFAULT_PASSWORD: admin
-    # volumes:
-    #  - pgadmin:/var/lib/pgadmin
-
+    volumes:
+      - pgadmin:/var/lib/pgadmin
     ports:
       - "5050:80"
-    # networks:
-     # - postgres
+    networks:
+      - postgres
     restart: unless-stopped
